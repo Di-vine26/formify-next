@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import {
   Form,
   FormControl,
-  FormField,
+  FormField as RHFFormField,
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
@@ -28,7 +28,7 @@ import {
   Switch,
 } from '@/components/ui/switch';
 
-import FormField from './FormField';
+import CustomFormField from './FormField';
 import DatePickerField from './DatePickerField';
 import AnimatedContainer from './AnimatedContainer';
 
@@ -123,267 +123,357 @@ const PatientForm = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
               {/* Personal Information Section */}
-              <FormField 
-                label="First Name" 
-                animationDelay={getAnimationDelay(1)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Your first name"
-                    className="form-input"
-                    {...form.register('firstName')}
-                  />
-                </FormControl>
-                {form.formState.errors.firstName && (
-                  <FormMessage>{form.formState.errors.firstName.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="First Name" 
+                    animationDelay={getAnimationDelay(1)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Your first name"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.firstName && (
+                      <FormMessage>{form.formState.errors.firstName.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Last Name" 
-                animationDelay={getAnimationDelay(2)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Your last name"
-                    className="form-input"
-                    {...form.register('lastName')}
-                  />
-                </FormControl>
-                {form.formState.errors.lastName && (
-                  <FormMessage>{form.formState.errors.lastName.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Last Name" 
+                    animationDelay={getAnimationDelay(2)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Your last name"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.lastName && (
+                      <FormMessage>{form.formState.errors.lastName.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Date of Birth" 
-                animationDelay={getAnimationDelay(3)}
-              >
-                <FormControl>
-                  <DatePickerField
-                    value={form.getValues('dateOfBirth')}
-                    onChange={(date) => form.setValue('dateOfBirth', date as Date, { shouldValidate: true })}
-                    placeholder="MM/DD/YYYY"
-                  />
-                </FormControl>
-                {form.formState.errors.dateOfBirth && (
-                  <FormMessage>{form.formState.errors.dateOfBirth.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Date of Birth" 
+                    animationDelay={getAnimationDelay(3)}
+                  >
+                    <FormControl>
+                      <DatePickerField
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="MM/DD/YYYY"
+                      />
+                    </FormControl>
+                    {form.formState.errors.dateOfBirth && (
+                      <FormMessage>{form.formState.errors.dateOfBirth.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Gender" 
-                animationDelay={getAnimationDelay(4)}
-              >
-                <Select
-                  onValueChange={(value) => form.setValue('gender', value, { shouldValidate: true })}
-                  value={form.getValues('gender')}
-                >
-                  <SelectTrigger className="form-select">
-                    <SelectValue placeholder="Select your gender" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-gray-100 shadow-md">
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.gender && (
-                  <FormMessage>{form.formState.errors.gender.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Gender" 
+                    animationDelay={getAnimationDelay(4)}
+                  >
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="form-select">
+                        <SelectValue placeholder="Select your gender" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-100 shadow-md">
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.formState.errors.gender && (
+                      <FormMessage>{form.formState.errors.gender.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Marital Status" 
-                animationDelay={getAnimationDelay(5)}
-              >
-                <Select
-                  onValueChange={(value) => form.setValue('maritalStatus', value, { shouldValidate: true })}
-                  value={form.getValues('maritalStatus')}
-                >
-                  <SelectTrigger className="form-select">
-                    <SelectValue placeholder="Select your status please" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-gray-100 shadow-md">
-                    <SelectItem value="single">Single</SelectItem>
-                    <SelectItem value="married">Married</SelectItem>
-                    <SelectItem value="divorced">Divorced</SelectItem>
-                    <SelectItem value="widowed">Widowed</SelectItem>
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.maritalStatus && (
-                  <FormMessage>{form.formState.errors.maritalStatus.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="maritalStatus"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Marital Status" 
+                    animationDelay={getAnimationDelay(5)}
+                  >
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="form-select">
+                        <SelectValue placeholder="Select your status please" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border border-gray-100 shadow-md">
+                        <SelectItem value="single">Single</SelectItem>
+                        <SelectItem value="married">Married</SelectItem>
+                        <SelectItem value="divorced">Divorced</SelectItem>
+                        <SelectItem value="widowed">Widowed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {form.formState.errors.maritalStatus && (
+                      <FormMessage>{form.formState.errors.maritalStatus.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Contact Number" 
-                animationDelay={getAnimationDelay(6)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="0123-456-789"
-                    className="form-input"
-                    {...form.register('contactNumber')}
-                  />
-                </FormControl>
-                {form.formState.errors.contactNumber && (
-                  <FormMessage>{form.formState.errors.contactNumber.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="contactNumber"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Contact Number" 
+                    animationDelay={getAnimationDelay(6)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="0123-456-789"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.contactNumber && (
+                      <FormMessage>{form.formState.errors.contactNumber.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="E-mail" 
-                animationDelay={getAnimationDelay(7)}
-              >
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="form-input"
-                    {...form.register('email')}
-                  />
-                </FormControl>
-                {form.formState.errors.email && (
-                  <FormMessage>{form.formState.errors.email.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="E-mail" 
+                    animationDelay={getAnimationDelay(7)}
+                  >
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.email && (
+                      <FormMessage>{form.formState.errors.email.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
               {/* Address Section */}
               <div className="md:col-span-2">
-                <FormField 
-                  label="Street Address" 
-                  animationDelay={getAnimationDelay(8)}
-                >
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your address"
-                      className="form-input"
-                      {...form.register('streetAddress')}
-                    />
-                  </FormControl>
-                  {form.formState.errors.streetAddress && (
-                    <FormMessage>{form.formState.errors.streetAddress.message}</FormMessage>
+                <RHFFormField
+                  control={form.control}
+                  name="streetAddress"
+                  render={({ field }) => (
+                    <CustomFormField 
+                      label="Street Address" 
+                      animationDelay={getAnimationDelay(8)}
+                    >
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your address"
+                          className="form-input"
+                          {...field}
+                        />
+                      </FormControl>
+                      {form.formState.errors.streetAddress && (
+                        <FormMessage>{form.formState.errors.streetAddress.message}</FormMessage>
+                      )}
+                    </CustomFormField>
                   )}
-                </FormField>
+                />
               </div>
 
-              <FormField 
-                label="Village" 
-                animationDelay={getAnimationDelay(9)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the village"
-                    className="form-input"
-                    {...form.register('village')}
-                  />
-                </FormControl>
-                {form.formState.errors.village && (
-                  <FormMessage>{form.formState.errors.village.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="village"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Village" 
+                    animationDelay={getAnimationDelay(9)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the village"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.village && (
+                      <FormMessage>{form.formState.errors.village.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Cell" 
-                animationDelay={getAnimationDelay(10)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the cell (if any)"
-                    className="form-input"
-                    {...form.register('cell')}
-                  />
-                </FormControl>
-                {form.formState.errors.cell && (
-                  <FormMessage>{form.formState.errors.cell.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="cell"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Cell" 
+                    animationDelay={getAnimationDelay(10)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the cell (if any)"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.cell && (
+                      <FormMessage>{form.formState.errors.cell.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Sector" 
-                animationDelay={getAnimationDelay(11)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the sector you live in"
-                    className="form-input"
-                    {...form.register('sector')}
-                  />
-                </FormControl>
-                {form.formState.errors.sector && (
-                  <FormMessage>{form.formState.errors.sector.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="sector"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Sector" 
+                    animationDelay={getAnimationDelay(11)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the sector you live in"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.sector && (
+                      <FormMessage>{form.formState.errors.sector.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="District" 
-                animationDelay={getAnimationDelay(12)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the district"
-                    className="form-input"
-                    {...form.register('district')}
-                  />
-                </FormControl>
-                {form.formState.errors.district && (
-                  <FormMessage>{form.formState.errors.district.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="district"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="District" 
+                    animationDelay={getAnimationDelay(12)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the district"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.district && (
+                      <FormMessage>{form.formState.errors.district.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Province" 
-                animationDelay={getAnimationDelay(13)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the Province"
-                    className="form-input"
-                    {...form.register('province')}
-                  />
-                </FormControl>
-                {form.formState.errors.province && (
-                  <FormMessage>{form.formState.errors.province.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="province"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Province" 
+                    animationDelay={getAnimationDelay(13)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the Province"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.province && (
+                      <FormMessage>{form.formState.errors.province.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Country" 
-                animationDelay={getAnimationDelay(14)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the Country"
-                    className="form-input"
-                    {...form.register('country')}
-                  />
-                </FormControl>
-                {form.formState.errors.country && (
-                  <FormMessage>{form.formState.errors.country.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Country" 
+                    animationDelay={getAnimationDelay(14)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the Country"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.country && (
+                      <FormMessage>{form.formState.errors.country.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
               {/* Medical Information */}
               <div className="md:col-span-2">
-                <FormField 
-                  label="Taking Medications currently?" 
-                  animationDelay={getAnimationDelay(15)}
-                  containerClassName="flex flex-row items-center justify-between"
-                  labelClassName="flex-1"
-                >
-                  <div className="flex items-center space-x-2">
-                    <FormControl>
-                      <Switch
-                        checked={form.getValues('takingMedications')}
-                        onCheckedChange={(checked) => form.setValue('takingMedications', checked, { shouldValidate: true })}
-                      />
-                    </FormControl>
-                    <span className="text-sm text-gray-500">
-                      {form.getValues('takingMedications') ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-                </FormField>
+                <RHFFormField
+                  control={form.control}
+                  name="takingMedications"
+                  render={({ field }) => (
+                    <CustomFormField 
+                      label="Taking Medications currently?" 
+                      animationDelay={getAnimationDelay(15)}
+                      containerClassName="flex flex-row items-center justify-between"
+                      labelClassName="flex-1"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <span className="text-sm text-gray-500">
+                          {field.value ? 'Yes' : 'No'}
+                        </span>
+                      </div>
+                    </CustomFormField>
+                  )}
+                />
               </div>
 
               {/* Emergency Contact */}
@@ -391,37 +481,49 @@ const PatientForm = () => {
                 <h3 className="text-lg font-medium text-gray-800 mb-4">In case of Emergency</h3>
               </AnimatedContainer>
 
-              <FormField 
-                label="Emergency Names" 
-                animationDelay={getAnimationDelay(17)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the Name(s) you'd like to"
-                    className="form-input"
-                    {...form.register('inCaseOfEmergency.name')}
-                  />
-                </FormControl>
-                {form.formState.errors.inCaseOfEmergency?.name && (
-                  <FormMessage>{form.formState.errors.inCaseOfEmergency.name.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="inCaseOfEmergency.name"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Emergency Names" 
+                    animationDelay={getAnimationDelay(17)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the Name(s) you'd like to"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.inCaseOfEmergency?.name && (
+                      <FormMessage>{form.formState.errors.inCaseOfEmergency.name.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
 
-              <FormField 
-                label="Contact" 
-                animationDelay={getAnimationDelay(18)}
-              >
-                <FormControl>
-                  <Input
-                    placeholder="Enter the Contact"
-                    className="form-input"
-                    {...form.register('inCaseOfEmergency.contact')}
-                  />
-                </FormControl>
-                {form.formState.errors.inCaseOfEmergency?.contact && (
-                  <FormMessage>{form.formState.errors.inCaseOfEmergency.contact.message}</FormMessage>
+              <RHFFormField
+                control={form.control}
+                name="inCaseOfEmergency.contact"
+                render={({ field }) => (
+                  <CustomFormField 
+                    label="Contact" 
+                    animationDelay={getAnimationDelay(18)}
+                  >
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the Contact"
+                        className="form-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    {form.formState.errors.inCaseOfEmergency?.contact && (
+                      <FormMessage>{form.formState.errors.inCaseOfEmergency.contact.message}</FormMessage>
+                    )}
+                  </CustomFormField>
                 )}
-              </FormField>
+              />
             </div>
 
             {/* Submit Button */}
